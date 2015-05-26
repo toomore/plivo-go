@@ -1,4 +1,26 @@
-package main
+// plivo
+/*
+	func main() {
+		p := Plivo{
+			Host:     "https://api.plivo.com/v1/Account",
+			User:     "",
+			Password: "",
+		}
+
+		data := map[string]string{
+			"dst":  "",
+			"src":  "",
+			"text": "",
+		}
+
+		fmt.Println(p)
+		p.Send(data)
+
+		fmt.Println(p.RenderPath("/Message/"))
+		fmt.Println(p.RenderPath("/Message"))
+	}
+*/
+package plivo
 
 import (
 	"bytes"
@@ -11,15 +33,16 @@ import (
 	"strings"
 )
 
+// Plivo struct
 type Plivo struct {
 	Host     string
 	User     string
 	Password string
 }
 
-func (p *Plivo) send(data map[string]string) {
-	json_data, _ := json.Marshal(data)
-	a, _ := http.NewRequest("POST", p.RenderPath("/Message/"), bytes.NewReader(json_data))
+func (p Plivo) Send(data map[string]string) {
+	jsonData, _ := json.Marshal(data)
+	a, _ := http.NewRequest("POST", p.renderPath("/Message/"), bytes.NewReader(jsonData))
 	a.URL.User = url.UserPassword(p.User, p.Password)
 
 	header := http.Header{}
@@ -40,31 +63,11 @@ func (p *Plivo) send(data map[string]string) {
 	}
 }
 
-func (p Plivo) RenderPath(urlpath string) string {
+func (p Plivo) renderPath(urlpath string) string {
 	URLPath, _ := url.ParseRequestURI(p.Host)
 	URLPath.Path = path.Join(URLPath.Path, p.User, urlpath)
 	if strings.LastIndex(urlpath, "/") >= 0 {
 		return fmt.Sprintf("%s/", URLPath.String())
 	}
 	return URLPath.String()
-}
-
-func main() {
-	p := Plivo{
-		Host:     "https://api.plivo.com/v1/Account",
-		User:     "",
-		Password: "",
-	}
-
-	data := map[string]string{
-		"dst":  "",
-		"src":  "",
-		"text": "",
-	}
-
-	fmt.Println(p)
-	p.send(data)
-
-	fmt.Println(p.RenderPath("/Message/"))
-	fmt.Println(p.RenderPath("/Message"))
 }
