@@ -1,25 +1,4 @@
-// plivo
-/*
-	func main() {
-		p := Plivo{
-			Host:     "https://api.plivo.com/v1/Account",
-			User:     "",
-			Password: "",
-		}
-
-		data := map[string]string{
-			"dst":  "",
-			"src":  "",
-			"text": "",
-		}
-
-		fmt.Println(p)
-		p.Send(data)
-
-		fmt.Println(p.RenderPath("/Message/"))
-		fmt.Println(p.RenderPath("/Message"))
-	}
-*/
+// Package plivo is to send SMS tools.
 package plivo
 
 import (
@@ -27,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -34,6 +14,9 @@ import (
 	"strings"
 	"time"
 )
+
+// PlivoAPI URL.
+const PlivoAPI = "https://api.plivo.com/v1/Account"
 
 // Fixed http too many open files.
 var httpClient = &http.Client{Transport: &http.Transport{
@@ -48,16 +31,18 @@ var httpClient = &http.Client{Transport: &http.Transport{
 
 // Message struct
 type Message struct {
-	dst  string
-	src  string
-	text string
+	dst     string
+	src     string
+	text    string
+	account *Account
 }
 
-func NewMessage(dst, src, text string) *Message {
-	return &Message{dst: dst, src: src, text: text}
+// NewMessage new a Message.
+func NewMessage(dst, src, text string, account *Account) *Message {
+	return &Message{dst: dst, src: src, text: text, account: account}
 }
 
-func (m Message) ToMap() map[string]string {
+func (m Message) toMap() map[string]string {
 	var result = make(map[string]string)
 	result["dst"] = m.dst
 	result["src"] = m.src
@@ -65,40 +50,32 @@ func (m Message) ToMap() map[string]string {
 	return result
 }
 
-// Plivo struct
-type Plivo struct {
-	Host     string
-	User     string
-	Password string
-}
-
-func (p Plivo) Send(data map[string]string) {
-	jsonData, _ := json.Marshal(data)
-	a, _ := http.NewRequest("POST", p.renderPath("/Message/"), bytes.NewReader(jsonData))
-	a.URL.User = url.UserPassword(p.User, p.Password)
-
-	header := http.Header{}
-	header.Add("Content-Type", "application/json")
-	a.Header = header
-
-	if false {
-		resp, err := httpClient.Do(a)
-		if err != nil {
-			fmt.Printf("Error >>> %s \n", err)
-		} else {
-			body, _ := ioutil.ReadAll(resp.Body)
-			fmt.Printf("Resp >>> \n%s\n", body)
+// Send to send SMS.
+func (m Message) Send() {
+	jsonData, _ := json.Marshal(m.toMap())
+	req, _ := http.NewRequest("POST", m.URL("/Message/"), bytes.NewReader(jsonData))
+	req.URL.User = url.UserPassword(m.account.User, m.account.Password)
+	req.Header = http.Header{"Content-Type": {"application/json"}}
+	if resp, err := httpClient.Do(req); err == nil {
+		if body, err := ioutil.ReadAll(resp.Body); err == nil {
+			defer resp.Body.Close()
+			log.Printf("%s\n", body)
 		}
-	} else {
-		fmt.Println(a, p)
 	}
 }
 
-func (p Plivo) renderPath(urlpath string) string {
-	URLPath, _ := url.ParseRequestURI(p.Host)
-	URLPath.Path = path.Join(URLPath.Path, p.User, urlpath)
+// URL to render api full URL.
+func (m Message) URL(urlpath string) string {
+	URLPath, _ := url.ParseRequestURI(PlivoAPI)
+	URLPath.Path = path.Join(URLPath.Path, m.account.User, urlpath)
 	if strings.LastIndex(urlpath, "/") >= 0 {
 		return fmt.Sprintf("%s/", URLPath.String())
 	}
 	return URLPath.String()
+}
+
+// Account struct
+type Account struct {
+	User     string
+	Password string
 }
