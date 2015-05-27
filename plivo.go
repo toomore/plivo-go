@@ -60,7 +60,7 @@ func (m Message) Send() {
 	if resp, err := httpClient.Do(req); err == nil {
 		if body, err := ioutil.ReadAll(resp.Body); err == nil {
 			defer resp.Body.Close()
-			log.Printf("%s\n", body)
+			log.Printf("%s\n%s\n", m.String(), body)
 		}
 	}
 }

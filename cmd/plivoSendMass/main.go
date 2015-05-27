@@ -12,7 +12,7 @@ Usage:
 The flags are:
 
 	-csv
-		CSV 檔案位置，需包含三個欄位 `dst` 收件人電話（8869xxxxxxxx）, `src` 寄件者電話（Plivo 申請的電話）, `text` 簡訊內容（支援多內容）
+		CSV 檔案位置，需包含三個欄位 `dst` 收件人電話（8869xxxxxxxx）, `src` 寄件者電話（Plivo 申請的電話）, `text` 簡訊內容（支援長內容）
 	-user
 		API Auth ID
 	-password
@@ -61,19 +61,19 @@ func main() {
 	alldata, _ := csv.NewReader(data).ReadAll()
 	for _, v := range alldata[1:] {
 		wg.Add(1)
-
-		value := make(map[string]string)
-		for keyi, key := range alldata[0] {
-			value[key] = v[keyi]
-		}
-
-		go func(value map[string]string) {
-			log.Println(value)
-			runtime.Gosched()
-			msg := plivo.NewMessage(value["dst"], value["src"], value["text"], account)
-			msg.Send()
+		go func(v []string) {
 			defer wg.Done()
-		}(value)
+			runtime.Gosched()
+
+			value := make(map[string]string)
+			for i, key := range alldata[0] {
+				value[key] = v[i]
+			}
+
+			msg := plivo.NewMessage(value["dst"], value["src"], value["text"], account)
+			log.Printf("Start %s", msg)
+			msg.Send()
+		}(v)
 	}
 	wg.Wait()
 }
