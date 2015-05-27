@@ -67,7 +67,12 @@ func (m Message) Send() {
 
 // String to print string.
 func (m Message) String() string {
-	return fmt.Sprintf(`<dst: "%s" src: "%s" text: "%s" Len: %d>`, m.dst, m.src, m.text, utf8.RuneCountInString(m.text))
+	return fmt.Sprintf(`<dst: "%s" src: "%s" text: "%s" Len: %d>`, m.dst, m.src, m.text, m.Len())
+}
+
+// Len to show length of Message text.
+func (m Message) Len() int {
+	return utf8.RuneCountInString(m.text)
 }
 
 // URL to render api full URL.
