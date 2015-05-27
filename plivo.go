@@ -27,11 +27,24 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"path"
 	"strings"
+	"time"
 )
+
+// Fixed http too many open files.
+var httpClient = &http.Client{Transport: &http.Transport{
+	Proxy: http.ProxyFromEnvironment,
+	Dial: (&net.Dialer{
+		Timeout:   0,
+		KeepAlive: 0,
+	}).Dial,
+	TLSHandshakeTimeout: 10 * time.Second,
+},
+}
 
 // Plivo struct
 type Plivo struct {
@@ -50,8 +63,7 @@ func (p Plivo) Send(data map[string]string) {
 	a.Header = header
 
 	if false {
-		var c http.Client
-		resp, err := c.Do(a)
+		resp, err := httpClient.Do(a)
 		if err != nil {
 			fmt.Printf("Error >>> %s \n", err)
 		} else {
