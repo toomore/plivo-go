@@ -46,6 +46,25 @@ var httpClient = &http.Client{Transport: &http.Transport{
 },
 }
 
+// Message struct
+type Message struct {
+	dst  string
+	src  string
+	text string
+}
+
+func NewMessage(dst, src, text string) *Message {
+	return &Message{dst: dst, src: src, text: text}
+}
+
+func (m Message) ToMap() map[string]string {
+	var result = make(map[string]string)
+	result["dst"] = m.dst
+	result["src"] = m.src
+	result["text"] = m.text
+	return result
+}
+
 // Plivo struct
 type Plivo struct {
 	Host     string
