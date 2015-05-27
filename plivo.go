@@ -13,6 +13,7 @@ import (
 	"path"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 // PlivoAPI URL.
@@ -62,6 +63,11 @@ func (m Message) Send() {
 			log.Printf("%s\n", body)
 		}
 	}
+}
+
+// String to print string.
+func (m Message) String() string {
+	return fmt.Sprintf(`<dst: "%s" src: "%s" text: "%s" Len: %d>`, m.dst, m.src, m.text, utf8.RuneCountInString(m.text))
 }
 
 // URL to render api full URL.

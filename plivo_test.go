@@ -2,6 +2,7 @@ package plivo
 
 import (
 	"fmt"
+	"log"
 	"testing"
 	"time"
 )
@@ -19,5 +20,6 @@ func TestMessage(t *testing.T) {
 	m := NewMessage(TestDst, TestSrc,
 		fmt.Sprintf("Hello 世界！%02d%02d%02d", now.Hour(), now.Minute(), now.Second()),
 		account)
+	log.Println(m)
 	m.Send()
 }
