@@ -10,16 +10,25 @@ import (
 const (
 	TestUser     string = ""
 	TestPassword string = ""
-	TestDst      string = ""
-	TestSrc      string = ""
+	TestDst      string = "123456789"
+	TestSrc      string = "886976543210"
 )
 
 func TestMessage(t *testing.T) {
 	account := &Account{User: TestUser, Password: TestPassword}
 	now := time.Now()
-	m := NewMessage(TestDst, TestSrc,
+	msg := NewMessage(TestDst, TestSrc,
 		fmt.Sprintf("Hello 世界！%02d%02d%02d", now.Hour(), now.Minute(), now.Second()),
 		account)
-	log.Println(m)
-	m.Send()
+	log.Println(msg)
+	msg.Send()
+}
+
+func ExampleMessage() {
+	account := &Account{User: TestUser, Password: TestPassword}
+	msg := NewMessage(TestDst, TestSrc, "Hello 世界！", account)
+	fmt.Println(msg)
+	msg.Send()
+	// output:
+	// <dst: "123456789" src: "886976543210" text: "Hello 世界！" Len: 9>
 }
