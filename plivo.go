@@ -90,3 +90,8 @@ type Account struct {
 	User     string
 	Password string
 }
+
+// MakeBulkDst to format bulk dst numbers.
+func MakeBulkDst(dst, sep string) string {
+	return strings.Replace(dst, sep, "<", -1)
+}

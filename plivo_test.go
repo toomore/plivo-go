@@ -24,6 +24,12 @@ func TestMessage(t *testing.T) {
 	msg.Send()
 }
 
+func TestMakeBulkDst(t *testing.T) {
+	if r := MakeBulkDst("1,2,3,4,5", ","); r != "1<2<3<4<5" {
+		t.Log("Should be `1<2<3<4<5`")
+	}
+}
+
 func ExampleMessage() {
 	account := &Account{User: TestUser, Password: TestPassword}
 	msg := NewMessage(TestDst, TestSrc, "Hello 世界！", account)
