@@ -36,9 +36,10 @@ import (
 	plivo "github.com/toomore/plivo-go"
 )
 
-var user = flag.String("user", "", "Plive User ID.")
-var password = flag.String("password", "", "Plive User Token.")
+var user = flag.String("user", os.Getenv("PLIVOID"), "Plive User ID.(Default get environment variable by the key named `PLIVOID`)")
+var password = flag.String("password", os.Getenv("PLIVOTOKEN"), "Plive User Token.(Default get environment variable by the key named `PLIVOTOKEN`)")
 var csvpath = flag.String("csv", "", "CSV file path.")
+var src = flag.String("src", os.Getenv("PLIVOSRC"), "Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)")
 var wg sync.WaitGroup
 
 func init() {
@@ -59,6 +60,19 @@ func main() {
 	defer data.Close()
 
 	alldata, _ := csv.NewReader(data).ReadAll()
+	var csvhasSrc bool
+	if *src == "" {
+		for _, v := range alldata[0] {
+			if v == "src" {
+				csvhasSrc = true
+				break
+			}
+		}
+		if !csvhasSrc {
+			log.Fatal("Need `src` variation in csv or environment variable.")
+		}
+	}
+
 	for _, v := range alldata[1:] {
 		wg.Add(1)
 		go func(v []string) {
@@ -68,6 +82,10 @@ func main() {
 			value := make(map[string]string)
 			for i, key := range alldata[0] {
 				value[key] = v[i]
+			}
+
+			if !csvhasSrc {
+				value["src"] = *src
 			}
 
 			msg := plivo.NewMessage(value["dst"], value["src"], value["text"], account)
