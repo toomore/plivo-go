@@ -7,6 +7,7 @@ Cmd
 ----
 
 1. plivoSendMass - [大量發送簡訊](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoSendMass)
+2. plivoQuickSend - [快速單發簡訊](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoQuickSend)
 
 License
 --------

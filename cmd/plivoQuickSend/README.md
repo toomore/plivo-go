@@ -3,7 +3,7 @@ plivoQuickSend
 
 [![GoDoc](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoQuickSend?status.svg)](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoQuickSend)
 
-大量發送簡訊
+快速單發簡訊
 
 Install:
 
