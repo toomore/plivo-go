@@ -24,7 +24,7 @@ The flags are:
 
 範例
 
-	plivoSendMass -src=12345678 -dst=886976543210 -text="測試簡訊" -user=xcdfasegg -password=oikjdndhy
+	plivoQuickSend -src=12345678 -dst=886976543210 -text="測試簡訊" -user=xcdfasegg -password=oikjdndhy
 
 */
 package main
