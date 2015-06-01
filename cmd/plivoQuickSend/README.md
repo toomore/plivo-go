@@ -16,15 +16,15 @@ Usage:
 The flags are:
 
 	-src
-		Plivo phone number.
+		Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)
 	-dst
 		Receiver phone number.
 	-text
 		SMS text content.
 	-user
-		API Auth ID
+		API Auth ID.(Default get environment variable by the key named `PLIVOID`)
 	-password
-		API Auth Token
+		API Auth Token.(Default get environment variable by the key named `PLIVOTOKEN`)
 
 範例
 

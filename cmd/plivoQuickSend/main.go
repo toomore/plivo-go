@@ -12,15 +12,15 @@ Usage:
 The flags are:
 
 	-src
-		Plivo phone number.
+		Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)
 	-dst
 		Receiver phone number.
 	-text
 		SMS text content.
 	-user
-		API Auth ID
+		API Auth ID.(Default get environment variable by the key named `PLIVOID`)
 	-password
-		API Auth Token
+		API Auth Token.(Default get environment variable by the key named `PLIVOTOKEN`)
 
 範例
 
@@ -36,9 +36,9 @@ import (
 	plivo "github.com/toomore/plivo-go"
 )
 
-var user = flag.String("user", "", "Plive User ID.")
-var password = flag.String("password", "", "Plive User Token.")
-var src = flag.String("src", "", "Plivo phone number.")
+var user = flag.String("user", os.Getenv("PLIVOID"), "Plive User ID.(Default get environment variable by the key named `PLIVOID`)")
+var password = flag.String("password", os.Getenv("PLIVOTOKEN"), "Plive User Token.(Default get environment variable by the key named `PLIVOTOKEN`)")
+var src = flag.String("src", os.Getenv("PLIVOSRC"), "Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)")
 var dst = flag.String("dst", "", "Receiver phone number.")
 var text = flag.String("text", "", "SMS text content.")
 
