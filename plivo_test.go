@@ -38,3 +38,9 @@ func ExampleMessage() {
 	// output:
 	// <dst: "123456789" src: "886976543210" text: "Hello 世界！" Len: 9>
 }
+
+func ExampleMakeBulkDst() {
+	fmt.Println(MakeBulkDst("1,2,3,4,5", ","))
+	// output:
+	// 1<2<3<4<5
+}
