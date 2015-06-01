@@ -17,6 +17,8 @@ The flags are:
 
 	-csv
 		CSV 檔案位置，需包含三個欄位 `dst` 收件人電話（8869xxxxxxxx）, `src` 寄件者電話（Plivo 申請的電話）, `text` 簡訊內容（支援長內容）
+	-src
+		Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)
 	-user
 		API Auth ID
 	-password
