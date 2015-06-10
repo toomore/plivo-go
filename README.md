@@ -9,6 +9,23 @@ Cmd
 1. plivoSendMass - [大量發送簡訊](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoSendMass)
 2. plivoQuickSend - [快速單發簡訊](https://godoc.org/github.com/toomore/plivo-go/cmd/plivoQuickSend)
 
+Docker
+-------
+
+Download image
+
+    docker pull toomore/plivo-go
+
+Send mass SMS with CSV.
+
+    docker run -d -v <local_csv_path>:<container_csv_path> -e PLIVOID=<ID> -e PLIVOTOKEN=<TOKEN> -e PLIVOSRC=<SRC> toomore/plivo-go plivoSendMass -csv=<container_csv_path>
+
+    549fc9920a6ec943a86b2f5afc569ef78d54a67e432e11888f0ddf5081158750
+
+Read send logs
+
+    docker logs 549fc9920a6ec943a86b2f5afc569ef78d54a67e432e11888f0ddf5081158750
+
 License
 --------
 

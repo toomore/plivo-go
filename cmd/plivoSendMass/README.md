@@ -20,11 +20,27 @@ The flags are:
 	-src
 		Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)
 	-user
-		API Auth ID
+		Plive User ID.(Default get environment variable by the key named `PLIVOID`)
 	-password
-		API Auth Token
+		Plive User Token.(Default get environment variable by the key named `PLIVOTOKEN`)
 
 範例
 
 	plivoSendMass -csv=/run/shm/list.csv -user=xcdfasegg -password=oikjdndhy
 
+Docker
+-------
+
+Download image
+
+    docker pull toomore/plivo-go
+
+Send mass SMS with CSV.
+
+    docker run -d -v <local_csv_path>:<container_csv_path> -e PLIVOID=<ID> -e PLIVOTOKEN=<TOKEN> -e PLIVOSRC=<SRC> toomore/plivo-go plivoSendMass -csv=<container_csv_path>
+
+    549fc9920a6ec943a86b2f5afc569ef78d54a67e432e11888f0ddf5081158750
+
+Read send logs
+
+    docker logs 549fc9920a6ec943a86b2f5afc569ef78d54a67e432e11888f0ddf5081158750
