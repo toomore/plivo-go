@@ -16,9 +16,9 @@ The flags are:
 	-src
 		Plivo phone number.(Default get environment variable by the key named `PLIVOSRC`)
 	-user
-		API Auth ID
+		Plive User ID.(Default get environment variable by the key named `PLIVOID`)
 	-password
-		API Auth Token
+		Plive User Token.(Default get environment variable by the key named `PLIVOTOKEN`)
 
 範例
 
